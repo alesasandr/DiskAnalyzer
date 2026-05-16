@@ -1,0 +1,41 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush x:Key="WindowBackground" Color="#F5F5F5"/>
+    <SolidColorBrush x:Key="PanelBackground" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="SurfaceBackground" Color="#E8E8EC"/>
+    <SolidColorBrush x:Key="SurfaceHover" Color="#D8D8DC"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="#C0C0C8"/>
+
+    <SolidColorBrush x:Key="ForegroundPrimary" Color="#1A1A2E"/>
+    <SolidColorBrush x:Key="ForegroundSecondary" Color="#444460"/>
+    <SolidColorBrush x:Key="ForegroundMuted" Color="#888899"/>
+
+    <SolidColorBrush x:Key="AccentBlue" Color="#1565C0"/>
+    <SolidColorBrush x:Key="AccentGreen" Color="#2E7D32"/>
+    <SolidColorBrush x:Key="AccentYellow" Color="#F57F17"/>
+    <SolidColorBrush x:Key="AccentRed" Color="#C62828"/>
+    <SolidColorBrush x:Key="AccentMauve" Color="#6A1B9A"/>
+
+    <SolidColorBrush x:Key="DataGridRowBackground" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="DataGridAltRowBackground" Color="#F0F0F5"/>
+    <SolidColorBrush x:Key="DataGridHeaderBackground" Color="#E0E0E8"/>
+    <SolidColorBrush x:Key="DataGridSelectedBackground" Color="#BBDEFB"/>
+
+    <SolidColorBrush x:Key="ProgressFill" Color="#1565C0"/>
+    <SolidColorBrush x:Key="ProgressBackground" Color="#E0E0E8"/>
+
+    <SolidColorBrush x:Key="ButtonBackground" Color="#E8E8EC"/>
+    <SolidColorBrush x:Key="ButtonHover" Color="#D8D8DC"/>
+    <SolidColorBrush x:Key="ButtonAccent" Color="#1565C0"/>
+    <SolidColorBrush x:Key="ButtonAccentForeground" Color="#FFFFFF"/>
+
+    <SolidColorBrush x:Key="InputBackground" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="InputBorder" Color="#C0C0C8"/>
+
+    <SolidColorBrush x:Key="StatusBarBackground" Color="#E0E0E8"/>
+
+    <SolidColorBrush x:Key="FolderColor" Color="#E65100"/>
+    <SolidColorBrush x:Key="FileColor" Color="#1A1A2E"/>
+
+</ResourceDictionary>

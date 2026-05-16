@@ -1,0 +1,50 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Background colors -->
+    <SolidColorBrush x:Key="WindowBackground" Color="#1E1E2E"/>
+    <SolidColorBrush x:Key="PanelBackground" Color="#181825"/>
+    <SolidColorBrush x:Key="SurfaceBackground" Color="#313244"/>
+    <SolidColorBrush x:Key="SurfaceHover" Color="#45475A"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="#45475A"/>
+
+    <!-- Text colors -->
+    <SolidColorBrush x:Key="ForegroundPrimary" Color="#CDD6F4"/>
+    <SolidColorBrush x:Key="ForegroundSecondary" Color="#A6ADC8"/>
+    <SolidColorBrush x:Key="ForegroundMuted" Color="#6C7086"/>
+
+    <!-- Accent colors -->
+    <SolidColorBrush x:Key="AccentBlue" Color="#89B4FA"/>
+    <SolidColorBrush x:Key="AccentGreen" Color="#A6E3A1"/>
+    <SolidColorBrush x:Key="AccentYellow" Color="#F9E2AF"/>
+    <SolidColorBrush x:Key="AccentRed" Color="#F38BA8"/>
+    <SolidColorBrush x:Key="AccentMauve" Color="#CBA6F7"/>
+
+    <!-- DataGrid alternating rows -->
+    <SolidColorBrush x:Key="DataGridRowBackground" Color="#1E1E2E"/>
+    <SolidColorBrush x:Key="DataGridAltRowBackground" Color="#252535"/>
+    <SolidColorBrush x:Key="DataGridHeaderBackground" Color="#11111B"/>
+    <SolidColorBrush x:Key="DataGridSelectedBackground" Color="#45475A"/>
+
+    <!-- Progress bar -->
+    <SolidColorBrush x:Key="ProgressFill" Color="#89B4FA"/>
+    <SolidColorBrush x:Key="ProgressBackground" Color="#313244"/>
+
+    <!-- Button colors -->
+    <SolidColorBrush x:Key="ButtonBackground" Color="#313244"/>
+    <SolidColorBrush x:Key="ButtonHover" Color="#45475A"/>
+    <SolidColorBrush x:Key="ButtonAccent" Color="#89B4FA"/>
+    <SolidColorBrush x:Key="ButtonAccentForeground" Color="#1E1E2E"/>
+
+    <!-- Input colors -->
+    <SolidColorBrush x:Key="InputBackground" Color="#313244"/>
+    <SolidColorBrush x:Key="InputBorder" Color="#45475A"/>
+
+    <!-- Status bar -->
+    <SolidColorBrush x:Key="StatusBarBackground" Color="#11111B"/>
+
+    <!-- Tree/folder colors -->
+    <SolidColorBrush x:Key="FolderColor" Color="#F9E2AF"/>
+    <SolidColorBrush x:Key="FileColor" Color="#CDD6F4"/>
+
+</ResourceDictionary>

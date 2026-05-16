@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="DiskAnalyzer.Console/DiskAnalyzer.Console.csproj" />
+  <Project Path="DiskAnalyzer.Core/DiskAnalyzer.Core.csproj" />
+  <Project Path="DiskAnalyzer.WPF/DiskAnalyzer.WPF.csproj" />
+</Solution>
