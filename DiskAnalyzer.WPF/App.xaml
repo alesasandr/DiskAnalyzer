@@ -149,22 +149,155 @@
                 <Setter Property="Padding" Value="2"/>
             </Style>
 
+            <!-- ComboBox dropdown popup items -->
+            <Style TargetType="ComboBoxItem">
+                <Setter Property="Background" Value="{StaticResource InputBackground}"/>
+                <Setter Property="Foreground" Value="{StaticResource ForegroundPrimary}"/>
+                <Setter Property="Padding" Value="6,4"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ComboBoxItem">
+                            <Border Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsHighlighted" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource DataGridSelectedBackground}"/>
+                                    <Setter Property="Foreground" Value="{StaticResource ForegroundPrimary}"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource AccentBlue}"/>
+                                    <Setter Property="Foreground" Value="{StaticResource ButtonAccentForeground}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- ComboBox with dark popup -->
+            <Style TargetType="ComboBox">
+                <Setter Property="Background" Value="{StaticResource InputBackground}"/>
+                <Setter Property="Foreground" Value="{StaticResource ForegroundPrimary}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource InputBorder}"/>
+                <Setter Property="Padding" Value="4,2"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ComboBox">
+                            <Grid>
+                                <ToggleButton Focusable="false"
+                                             IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                             ClickMode="Press">
+                                    <ToggleButton.Template>
+                                        <ControlTemplate TargetType="ToggleButton">
+                                            <Border Background="{StaticResource InputBackground}"
+                                                    BorderBrush="{StaticResource InputBorder}"
+                                                    BorderThickness="1"
+                                                    CornerRadius="2">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="20"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <ContentPresenter Grid.Column="0"
+                                                                      Margin="4,2"
+                                                                      VerticalAlignment="Center"
+                                                                      HorizontalAlignment="Left"
+                                                                      Content="{Binding Path=SelectionBoxItem, RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                                                                      ContentTemplate="{Binding Path=SelectionBoxItemTemplate, RelativeSource={RelativeSource AncestorType=ComboBox}}"/>
+                                                    <TextBlock Grid.Column="1" Text="▾"
+                                                               Foreground="{StaticResource ForegroundSecondary}"
+                                                               VerticalAlignment="Center"
+                                                               HorizontalAlignment="Center"
+                                                               FontSize="10"/>
+                                                </Grid>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </ToggleButton.Template>
+                                </ToggleButton>
+                                <Popup IsOpen="{TemplateBinding IsDropDownOpen}"
+                                       Placement="Bottom"
+                                       AllowsTransparency="True"
+                                       PopupAnimation="Slide">
+                                    <Border Background="{StaticResource InputBackground}"
+                                            BorderBrush="{StaticResource BorderBrush}"
+                                            BorderThickness="1"
+                                            MinWidth="{TemplateBinding ActualWidth}"
+                                            MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                        <ScrollViewer>
+                                            <ItemsPresenter/>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Popup>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- TabControl — no white bleed -->
             <Style TargetType="TabControl">
                 <Setter Property="Background" Value="{StaticResource PanelBackground}"/>
                 <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+                <Setter Property="BorderThickness" Value="0,1,0,0"/>
                 <Setter Property="Foreground" Value="{StaticResource ForegroundPrimary}"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TabControl">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Border Grid.Row="0"
+                                        Background="{StaticResource SurfaceBackground}"
+                                        BorderBrush="{StaticResource BorderBrush}"
+                                        BorderThickness="0,0,0,1">
+                                    <TabPanel IsItemsHost="True"/>
+                                </Border>
+                                <Border Grid.Row="1"
+                                        Background="{StaticResource PanelBackground}"
+                                        BorderBrush="{StaticResource BorderBrush}"
+                                        BorderThickness="0">
+                                    <ContentPresenter ContentSource="SelectedContent"/>
+                                </Border>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
 
+            <!-- TabItem — explicit template so no system white bleeds through -->
             <Style TargetType="TabItem">
                 <Setter Property="Foreground" Value="{StaticResource ForegroundSecondary}"/>
-                <Setter Property="Background" Value="{StaticResource SurfaceBackground}"/>
-                <Setter Property="Padding" Value="10,4"/>
-                <Style.Triggers>
-                    <Trigger Property="IsSelected" Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource AccentBlue}"/>
-                        <Setter Property="Background" Value="{StaticResource PanelBackground}"/>
-                    </Trigger>
-                </Style.Triggers>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Padding" Value="12,5"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TabItem">
+                            <Border Name="TabBorder"
+                                    Background="{TemplateBinding Background}"
+                                    BorderThickness="0"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter ContentSource="Header"
+                                                  VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="TabBorder" Property="Background" Value="{StaticResource PanelBackground}"/>
+                                    <Setter TargetName="TabBorder" Property="BorderThickness" Value="0,2,0,0"/>
+                                    <Setter TargetName="TabBorder" Property="BorderBrush" Value="{StaticResource AccentBlue}"/>
+                                    <Setter Property="Foreground" Value="{StaticResource ForegroundPrimary}"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="TabBorder" Property="Background" Value="{StaticResource SurfaceHover}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
 
             <Style TargetType="ProgressBar">
