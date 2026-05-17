@@ -41,13 +41,6 @@
                 <Setter Property="CaretBrush" Value="{StaticResource ForegroundPrimary}"/>
             </Style>
 
-            <Style TargetType="ComboBox">
-                <Setter Property="Background" Value="{StaticResource InputBackground}"/>
-                <Setter Property="Foreground" Value="{StaticResource ForegroundPrimary}"/>
-                <Setter Property="BorderBrush" Value="{StaticResource InputBorder}"/>
-                <Setter Property="Padding" Value="4,2"/>
-            </Style>
-
             <Style TargetType="Button">
                 <Setter Property="Background" Value="{StaticResource ButtonBackground}"/>
                 <Setter Property="Foreground" Value="{StaticResource ForegroundPrimary}"/>

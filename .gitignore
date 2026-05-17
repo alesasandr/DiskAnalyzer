@@ -21,3 +21,6 @@ Thumbs.db
 
 # App data
 AppData/
+
+# Publish output
+publish/
