@@ -32,6 +32,13 @@ public partial class MainWindow : Window
                 FolderTree.Items.Add(vm.RootNode);
             }
         };
+
+        // RootNode may already be set (loaded from cache in VM constructor before this handler was registered)
+        if (vm.RootNode != null)
+        {
+            FolderTree.Items.Clear();
+            FolderTree.Items.Add(vm.RootNode);
+        }
     }
 
     private string? BrowseFolder()

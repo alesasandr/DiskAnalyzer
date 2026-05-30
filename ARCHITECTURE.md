@@ -56,6 +56,19 @@ public int FileCount => Children.Sum(c => c is FolderNode f ? f.FileCount : 1);
 
 POCO-класс настроек, сериализуемый через `System.Text.Json`. Хранится в `%AppData%\DiskAnalyzer\settings.json`.
 
+#### `ScanCache` и `CachedFileSystemNode`
+
+Сериализуемые модели для хранения результатов сканирования на диске.
+
+`ScanCache` — корневой объект кэша: содержит путь сканирования, дату, суммарные счётчики и корневой узел дерева.
+
+`CachedFileSystemNode` — плоская сериализуемая копия узла файловой системы. Отличается от `FileSystemNode` тем, что:
+- не требует абстрактного базового класса (сериализатор работает с конкретными типами)
+- хранит `IsDirectory` и `Extension` как явные поля вместо полиморфизма
+- содержит рекурсивный список `Children`
+
+При загрузке `JsonScanCacheService` восстанавливает живое дерево `FolderNode`/`FileNode` из этого плоского представления.
+
 ---
 
 ### Интерфейсы (`Interfaces/`)
@@ -67,6 +80,7 @@ POCO-класс настроек, сериализуемый через `System.
 | `IReportExporter`   | Экспорт дерева в CSV и текстовый формат                |
 | `ISettingsService`  | Загрузка/сохранение настроек                           |
 | `IDriveProvider`    | Получение списка доступных дисков                      |
+| `IScanCacheService` | Сохранение и загрузка результатов сканирования         |
 
 **Зачем `IFileSystemProvider`?** В реальном проекте это позволяет подменить настоящий `System.IO` на mock в тестах. Тесты могут проверять логику сканирования на искусственной структуре папок, не касаясь диска.
 
@@ -113,6 +127,24 @@ SizeFormatter.Format(1_500_000_000) // → "1.4 GB"
 #### `JsonSettingsService`
 
 Использует `System.Text.Json` (встроен в .NET). Файл создаётся при первом сохранении. При любой ошибке чтения (файл повреждён, не существует) возвращаются дефолтные настройки — приложение не падает.
+
+#### `JsonScanCacheService`
+
+Реализует `IScanCacheService`. Сохраняет и восстанавливает полное дерево файловой системы в JSON-файл.
+
+**Расположение кэша:** `%AppData%\DiskAnalyzer\Cache\scan_<SHA256>.json`
+
+**Именование файлов:** имя файла — первые 16 символов SHA256-хеша пути в верхнем регистре. Используется `SHA256.HashData` из `System.Security.Cryptography` вместо `string.GetHashCode()` — это принципиально важно: `GetHashCode()` в .NET Core рандомизируется при каждом запуске процесса, что делало бы невозможным найти сохранённый файл после перезапуска.
+
+```csharp
+var bytes = Encoding.UTF8.GetBytes(path.ToUpperInvariant());
+var hash = SHA256.HashData(bytes);
+var hashStr = Convert.ToHexString(hash)[..16]; // стабильно между запусками
+```
+
+**Восстановление дерева:** `ReconstructFolderNode` рекурсивно обходит `CachedFileSystemNode` и создаёт живые объекты `FolderNode`/`FileNode` с правильными ссылками `Parent` и пересчитанными `PercentOfParent`.
+
+**Интеграция с запуском:** `MainViewModel` вызывает `LoadCache` в конструкторе, используя `LastScannedPath` из настроек. Так как это происходит до создания `MainWindow`, в `MainWindow` добавлена явная проверка `RootNode != null` после подписки на `PropertyChanged` — иначе TreeView оставался бы пустым, так как событие уже отработало.
 
 ---
 
@@ -215,3 +247,5 @@ Program.cs (top-level statements)
 | События для диалогов в ViewModel | ViewModel не зависит от WPF-диалогов, остаётся тестируемой |
 | Нет сторонних библиотек | Только стандартная библиотека .NET — меньше зависимостей, проще сборка |
 | `IFileSystemProvider` интерфейс | Позволяет подменить `System.IO` в unit-тестах |
+| SHA256 вместо `GetHashCode()` для имён кэша | `GetHashCode()` в .NET Core нестабилен между процессами — один и тот же путь даёт разный хеш при каждом запуске, файл невозможно найти повторно |
+| Проверка `RootNode` после подписки в `MainWindow` | `LoadCache` вызывается в конструкторе ViewModel до создания View; `PropertyChanged` к этому моменту уже отработало — без явной проверки TreeView оставался бы пустым |

@@ -14,6 +14,7 @@ public class MainViewModel : BaseViewModel
     private readonly IDriveProvider _driveProvider;
     private readonly ISettingsService _settingsService;
     private readonly IReportExporter _reportExporter;
+    private readonly IScanCacheService _cacheService;
     private AppSettings _settings;
 
     private CancellationTokenSource? _cts;
@@ -165,11 +166,12 @@ public class MainViewModel : BaseViewModel
     public event Action? OpenSettingsRequested;
     public event Action? ShowHelpRequested;
 
-    public MainViewModel(IDriveProvider driveProvider, ISettingsService settingsService, IReportExporter reportExporter)
+    public MainViewModel(IDriveProvider driveProvider, ISettingsService settingsService, IReportExporter reportExporter, IScanCacheService cacheService)
     {
         _driveProvider = driveProvider;
         _settingsService = settingsService;
         _reportExporter = reportExporter;
+        _cacheService = cacheService;
         _settings = settingsService.Load();
         _currentSortMode = _settings.DefaultSortMode;
 
@@ -191,7 +193,11 @@ public class MainViewModel : BaseViewModel
         LoadDrives();
 
         if (!string.IsNullOrEmpty(_settings.LastScannedPath))
+        {
             ScanPath = _settings.LastScannedPath;
+            // Try to load cached results for the last scanned path
+            LoadCachedResults(_settings.LastScannedPath);
+        }
     }
 
     private void LoadDrives()
@@ -241,6 +247,9 @@ public class MainViewModel : BaseViewModel
             _scanStopwatch.Stop();
             RootNode = root;
 
+            // Cache the scan results
+            _cacheService.SaveCache(path, root);
+
             BuildBreadcrumbs(root);
             ShowFolderContents(root);
 
@@ -275,6 +284,38 @@ public class MainViewModel : BaseViewModel
     {
         IsCancelling = true;
         _cts?.Cancel();
+    }
+
+    private void LoadCachedResults(string path)
+    {
+        try
+        {
+            var cached = _cacheService.LoadCache(path);
+            if (cached != null)
+            {
+                RootNode = cached;
+                BuildBreadcrumbs(cached);
+                ShowFolderContents(cached);
+
+                var extStats = ExtensionAnalyzer.Analyze(cached);
+                ExtensionStats.Clear();
+                foreach (var s in extStats) ExtensionStats.Add(s);
+
+                var topFiles = ExtensionAnalyzer.GetTopLargestFiles(cached, 50);
+                TopFiles.Clear();
+                foreach (var f in topFiles) TopFiles.Add(f);
+
+                StatusText = $"Cached: {cached.FileCount:N0} files | {cached.FolderCount:N0} folders | Total: {cached.FormattedSize}";
+            }
+            else
+            {
+                StatusText = "No cached data available.";
+            }
+        }
+        catch (Exception ex)
+        {
+            StatusText = $"Cache load error: {ex.Message}";
+        }
     }
 
     private void BrowseFolder()

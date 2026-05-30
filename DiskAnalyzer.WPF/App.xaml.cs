@@ -19,7 +19,8 @@ public partial class App : Application
 
         var driveProvider = new DriveProvider();
         var exporter = new CsvReportExporter();
-        var vm = new MainViewModel(driveProvider, settingsService, exporter);
+        var cacheService = new JsonScanCacheService();
+        var vm = new MainViewModel(driveProvider, settingsService, exporter, cacheService);
 
         var window = new MainWindow(vm);
         window.Show();

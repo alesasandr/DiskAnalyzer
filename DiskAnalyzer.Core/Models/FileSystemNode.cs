@@ -6,7 +6,7 @@ public abstract class FileSystemNode
 {
     public string Name { get; }
     public string FullPath { get; }
-    public long SizeBytes { get; protected set; }
+    public long SizeBytes { get; set; }
     public DateTime LastModified { get; }
     public FileSystemNode? Parent { get; }
     public double PercentOfParent { get; set; }
